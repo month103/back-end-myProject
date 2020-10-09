@@ -17,8 +17,13 @@ import system.services.AccountsService;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    final
     AccountsService accountsService;
+
+    @Autowired
+    public SecurityConfig(AccountsService accountsService) {
+        this.accountsService = accountsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

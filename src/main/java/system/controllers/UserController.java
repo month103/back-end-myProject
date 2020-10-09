@@ -1,8 +1,5 @@
 package system.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +16,15 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    @Autowired
-     RepositoryUser repository;
-    @Autowired
-     PasswordEncoder passwordEncoder;
+    final
+    RepositoryUser repository;
+    final
+    PasswordEncoder passwordEncoder;
+
+    public UserController(RepositoryUser repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     @GetMapping("/")
@@ -46,17 +48,6 @@ public class UserController {
 
     @RequestMapping( value = "/update", method = RequestMethod.POST)
     public User update(@RequestBody User user, Principal us){
-        System.out.println(user);
-
-//        User optional = repository.findByUsername(us.getName());
-//        if(user.getPassword().equals("")) {
-//            optional.setPassword(passwordEncoder.encode(user.getPassword()));
-//        }
-//        optional.setUsername(user.getUsername());
-//        optional.setName(user.getName());
-//        repository.save(optional);
-//        return optional;
-
        Optional <User> optional = Optional.of(repository.findByUsername(us.getName()));
         return repository.save(optional.map(a -> {
             a.setUsername(user.getUsername());
@@ -103,7 +94,7 @@ public class UserController {
     @RequestMapping( value = "/updateA", method = RequestMethod.POST)
     public User update(@RequestBody User user){
         Optional<User> optional = repository.findById(user.getId());
-        UserDet accounts = new UserDet(user);
+//        UserDet accounts = new UserDet(user);
         return repository.save(optional.map(user1 -> {
             user1.setUsername(user.getUsername());
             user1.setName(user.getName());
