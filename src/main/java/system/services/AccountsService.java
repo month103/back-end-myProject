@@ -14,8 +14,7 @@ import javax.transaction.Transactional;
 @Service
 public class AccountsService implements UserDetailsService {
 
-    final
-    RepositoryUser repositoryUser;
+    final RepositoryUser repositoryUser;
 
     public AccountsService(RepositoryUser repositoryUser) {
         this.repositoryUser = repositoryUser;
@@ -29,10 +28,5 @@ public class AccountsService implements UserDetailsService {
             return new UserDet(user);
         }
         throw new UsernameNotFoundException("account not found, please check your imposed data");
-
     }
-
-
-
-
 }

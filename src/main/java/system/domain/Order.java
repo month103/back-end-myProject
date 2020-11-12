@@ -2,6 +2,7 @@ package system.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
@@ -29,7 +30,7 @@ public class Order {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_user")
+    @JoinColumn(name = "id_user")
     private User user;
 
     public User getUser() {
@@ -105,7 +106,7 @@ public class Order {
     public Order() {
     }
 
-    public Order (String dat, String doctor, String time, String status, String note, User user){
+    public Order(String dat, String doctor, String time, String status, String note, User user) {
         this.date = dat;
         this.doctor = doctor;
         this.time = time;

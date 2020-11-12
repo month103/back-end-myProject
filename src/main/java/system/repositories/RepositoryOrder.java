@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface RepositoryOrder extends JpaRepository<Order, Long> {
     void deleteRequestsByUserId(long a);
+
     void deleteRequestByUserIdAndId(long a, long b);
+
     List<Order> findOrdersByUserId(long a);
+
     Order findById(long a);
 }

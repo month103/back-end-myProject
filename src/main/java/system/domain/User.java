@@ -34,7 +34,7 @@ public class User {
     private String name = "";
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Order> order;
 
     public void setId(long id) {
@@ -73,14 +73,15 @@ public class User {
         this.active = 1;
     }
 
-    public User(String username, String password, String roles, String permissions){
+    public User(String username, String password, String roles, String permissions) {
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.permissions = permissions;
         this.active = 1;
     }
-    public User(String username, String password, String roles, String permissions, String name){
+
+    public User(String username, String password, String roles, String permissions, String name) {
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -89,7 +90,8 @@ public class User {
         this.name = name;
     }
 
-    public User(){}
+    public User() {
+    }
 
     public long getId() {
         return id;
@@ -119,15 +121,15 @@ public class User {
         this.permissions = permissions;
     }
 
-    public List<String> getRoleList(){
-        if(this.roles.length() > 0){
+    public List<String> getRoleList() {
+        if (this.roles.length() > 0) {
             return Arrays.asList(this.roles.split(","));
         }
         return new ArrayList<>();
     }
 
-    public List<String> getPermissionList(){
-        if(this.permissions.length() > 0){
+    public List<String> getPermissionList() {
+        if (this.permissions.length() > 0) {
             return Arrays.asList(this.permissions.split(","));
         }
         return new ArrayList<>();
@@ -143,7 +145,7 @@ public class User {
                 ", roles='" + roles + '\'' +
                 ", permissions='" + permissions + '\'' +
                 ", name='" + name + '\'' +
-                ", request=" +  +
+                ", request=" + +
                 '}';
     }
 }

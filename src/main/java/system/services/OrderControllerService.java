@@ -13,23 +13,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderService {
+public class OrderControllerService {
 
     final RepositoryOrder repositoryOrder;
     final RepositoryUser repository;
 
     @Autowired
-    public OrderService(RepositoryOrder repositoryOrder, RepositoryUser repository){
+    public OrderControllerService(RepositoryOrder repositoryOrder, RepositoryUser repository) {
         this.repositoryOrder = repositoryOrder;
         this.repository = repository;
     }
 
-    public List<Order> findById(Principal user){
+    public List<Order> findById(Principal user) {
         User user1 = repository.findByUsername(user.getName());
         return repositoryOrder.findOrdersByUserId(user1.getId());
     }
 
-    public Order updateOrder(Order order){
+    public Order updateOrder(Order order) {
         Optional<Order> or = Optional.of(repositoryOrder.findById(order.getId()));
         return repositoryOrder.save(or.map(a -> {
             a.setDate(order.getDate());
@@ -41,11 +41,11 @@ public class OrderService {
         }).orElseThrow(() -> new RuntimeException("update error")));
     }
 
-    public Optional<Order> getOrderById(Long id){
+    public Optional<Order> getOrderById(Long id) {
         return repositoryOrder.findById(id);
     }
 
-    public String order(Order order, Principal user){
+    public String order(Order order, Principal user) {
         System.out.println(order);
         System.out.println(user.getName());
         User op = repository.findByUsername(user.getName());
@@ -54,13 +54,13 @@ public class OrderService {
         return "OK";
     }
 
-    public String deleteOrder(Principal pr){
+    public String deleteOrder(Principal pr) {
         User user = repository.findByUsername(pr.getName());
         repositoryOrder.deleteRequestsByUserId(user.getId());
         return "Delete successful";
     }
 
-    public String deleteOrders(Principal us, long id){
+    public String deleteOrders(Principal us, long id) {
         User user = repository.findByUsername(us.getName());
         repositoryOrder.deleteRequestByUserIdAndId(user.getId(), id);
         return "Delete successful";

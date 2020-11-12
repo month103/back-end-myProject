@@ -5,16 +5,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import system.domain.User;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 public class UserDet implements UserDetails {
-    private User user;
+    private final User user;
 
-    public UserDet(User user){
+    public UserDet(User user) {
         this.user = user;
     }
 
@@ -66,5 +64,4 @@ public class UserDet implements UserDetails {
     public boolean isEnabled() {
         return this.user.getActive() == 1;
     }
-
 }

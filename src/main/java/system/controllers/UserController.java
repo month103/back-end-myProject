@@ -1,11 +1,9 @@
 package system.controllers;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import system.domain.User;
-import system.repositories.RepositoryUser;
-import system.services.UserDet;
+import system.services.UserControllerService;
 
 import java.security.Principal;
 import java.util.List;
@@ -16,92 +14,59 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    final
-    RepositoryUser repository;
-    final
-    PasswordEncoder passwordEncoder;
+    final UserControllerService userControllerService;
 
-    public UserController(RepositoryUser repository, PasswordEncoder passwordEncoder) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
+    public UserController(UserControllerService userControllerService) {
+        this.userControllerService = userControllerService;
     }
-
 
     @GetMapping("/")
-    public String login(){
-        return "authenticated successfully" ;
+    public String login() {
+        return "authenticated successfully";
     }
 
-    @RequestMapping( value = "/get", method = RequestMethod.GET)
-    public User getById(Principal user){
-       User u = repository.findByUsername(user.getName());
-       u.setPassword("");
-        return u;
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public User getById(Principal user) {
+        return userControllerService.getById(user);
     }
 
-    @RequestMapping( value = "/delete", method = RequestMethod.DELETE)
-    public String delete(Principal user){
-        User user1 = repository.findByUsername(user.getName());
-        repository.deleteById(user1.getId());
-        return "OK";
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public String delete(Principal user) {
+        return userControllerService.delete(user);
     }
 
-    @RequestMapping( value = "/update", method = RequestMethod.POST)
-    public User update(@RequestBody User user, Principal us){
-       Optional <User> optional = Optional.of(repository.findByUsername(us.getName()));
-        return repository.save(optional.map(a -> {
-            a.setUsername(user.getUsername());
-            a.setName(user.getName());
-            a.setPassword(passwordEncoder.encode(user.getPassword()));
-            return a;
-        }).orElseThrow(() -> new RuntimeException("please enter your username, password and name")));
-
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public User update(@RequestBody User user, Principal us) {
+        return userControllerService.update(user, us);
     }
 
     @RequestMapping(value = "/signUp", method = RequestMethod.POST)
-    public User signUp(@RequestBody User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.activeEnable();
-        user.setRoles("USER");
-        user.setPermissions("");
-        return repository.save(user);
-
+    public User signUp(@RequestBody User user) {
+        return userControllerService.signUp(user);
     }
 
-    @RequestMapping( value = "/createA", method = RequestMethod.POST )
+    @RequestMapping(value = "/createA", method = RequestMethod.POST)
     public User createA(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println("create");
-        return repository.save(user);
+        return userControllerService.createA(user);
     }
 
-    @RequestMapping( value = "/get/{id}", method = RequestMethod.GET)
-    public Optional<User> get(@PathVariable("id") Long id){
-        return repository.findById(id);
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public Optional<User> get(@PathVariable("id") Long id) {
+        return userControllerService.get(id);
     }
 
-    @RequestMapping( value = "/getAll", method = RequestMethod.GET)
-    public List<User> get(){
-        return repository.findAll();
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public List<User> get() {
+        return userControllerService.get();
     }
 
-    @RequestMapping( value = "/delete/{id}", method = RequestMethod.DELETE)
-    public String delete(@PathVariable("id") Long id){
-        repository.deleteById(id);
-        return "OK";
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public String delete(@PathVariable("id") Long id) {
+        return userControllerService.delete(id);
     }
 
-    @RequestMapping( value = "/updateA", method = RequestMethod.POST)
-    public User update(@RequestBody User user){
-        Optional<User> optional = repository.findById(user.getId());
-//        UserDet accounts = new UserDet(user);
-        return repository.save(optional.map(user1 -> {
-            user1.setUsername(user.getUsername());
-            user1.setName(user.getName());
-            user1.setPassword(passwordEncoder.encode(user.getPassword()));
-            return user1;
-        }).orElseThrow(() -> new RuntimeException("please enter your username, password, id and Name")));
-
+    @RequestMapping(value = "/updateA", method = RequestMethod.POST)
+    public User update(@RequestBody User user) {
+        return userControllerService.update(user);
     }
-
 }
